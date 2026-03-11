@@ -14,42 +14,19 @@ pip install numpy==1.26.0
 
 ## 数据集
 
-本项目使用OS（Optical-SAR）数据集，数据集包含以下几个部分：
+本项目使用OS（Optical-SAR）数据集，包含SAR和光学图像对，提供两种分辨率版本，每种分辨率下分为 train、val、test 三个子集：
 
-### OSdataset — 原始数据集
-
-包含SAR和光学图像对，提供两种分辨率版本，每种分辨率下分为 train、val、test 三个子集：
-
-- **OSdataset/512/**：512x512 分辨率的SAR-光学图像对，用于生成训练用的64x64 patch
+- **OSdataset/512/**：512x512 分辨率的SAR-光学图像对
 - **OSdataset/256/**：256x256 分辨率的SAR-光学图像对（512版本的降采样）
-
-### OS_crop — 评估数据集
-
-由原始数据集裁剪而来，用于模型评估。每组图像对存放在独立文件夹中（如 `sar1/`），包含：
-
-- `sar{n}.png`：512x512 的SAR图像
-- `opt{n}.png`：480x480 的光学图像（相对SAR图像存在32像素的平移偏移）
-- `mat.txt`：真实变换矩阵（ground truth），记录了SAR与光学图像之间的几何变换关系
-
-### OSdataset/patch — 训练patch
-
-由 `gen_sar_opt.py` 从 OSdataset/512 的图像中切分生成的 64x64 小块，用于训练特征描述子网络。每个patch包含对应位置的SAR和光学图像块，训练时网络学习在这些小块上提取可匹配的特征描述子。
-
-### 数据处理流程
-
-```
-OSdataset/512 (512x512原图) → gen_sar_opt.py → OSdataset/patch (64x64 patch) → 训练
-                             → 裁剪偏移 → OS_crop (512+480, 32px偏移) → 评估
-```
 
 ## 训练
 
-1. 先使用 `gen_sar_opt.py` 生成训练用的64x64 patch，修改其中的数据集路径：
+1. 使用 `gen_sar_opt.py` 将 OSdataset/512 的512x512图像切分为64x64的patch，生成到 `OSdataset/patch/` 目录，用于训练特征描述子网络。修改其中的数据集路径：
    ```python
    data_root = 'OSdataset/512/'
    patch_root = 'OSdataset/patch/'
    ```
-2. 运行后会生成 `OS_train.txt`、`OS_val.txt`、`OS_test.txt` 索引文件
+2. 运行后会同时生成 `OS_train.txt`、`OS_val.txt`、`OS_test.txt` 索引文件
 3. 修改 `train.py` 里面的相关路径：
    ```python
    cfg.train_data = 'OS_train.txt'
@@ -60,13 +37,20 @@ OSdataset/512 (512x512原图) → gen_sar_opt.py → OSdataset/patch (64x64 patc
 
 ## 评估
 
-1. 使用 `eval.py` 脚本进行测试集评估
-2. 修改模型路径和数据集路径：
-   ```python
-   eval_path = 'OS_crop'
-   model_base_path = f'{_model_base_path}/weights/'
-   ```
-3. 开始运行评估，评估完成会有结果输出：`mse: 1.8844 1.7377 2.6995 rate 0.9232`
+评估使用 `OS_crop/` 目录下的数据，该目录由原始数据集裁剪而来。每组图像对存放在独立文件夹中（如 `sar1/`），包含：
+
+- `sar{n}.png`：512x512 的SAR图像
+- `opt{n}.png`：480x480 的光学图像（相对SAR图像存在32像素的平移偏移）
+- `mat.txt`：真实变换矩阵（ground truth），记录了SAR与光学图像之间的几何变换关系
+
+使用 `eval.py` 脚本进行测试集评估，修改模型路径和数据集路径：
+
+```python
+eval_path = 'OS_crop'
+model_base_path = f'{_model_base_path}/weights/'
+```
+
+运行评估，完成后会有结果输出：`mse: 1.8844 1.7377 2.6995 rate 0.9232`
 
 ## 可视化界面
 
