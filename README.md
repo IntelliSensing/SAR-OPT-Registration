@@ -2,7 +2,7 @@
 
 <p align="left">
   <a href="README_zh.md">
-    <img src="https://img.shields.io/badge/中文-red" height="18">
+    <img src="https://img.shields.io/badge/中文-blue" height="18">
   </a>
 </p>
 
