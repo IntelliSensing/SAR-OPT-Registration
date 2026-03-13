@@ -1,4 +1,4 @@
-# SAR-Optical-Registration
+# SAR-OPT-Registration
 
 <p align="left">
   <a href="README.md">
