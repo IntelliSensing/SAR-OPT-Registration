@@ -128,4 +128,6 @@ python Ui_MainWindow.py
 
 ### Demo
 
-<img src="demo.png" alt="demo" width="80%">
+<p align="center">
+  <img src="demo.png" alt="demo" width="80%">
+</p>

@@ -108,4 +108,6 @@ python Ui_MainWindow.py
 
 ### 效果展示
 
-<img src="demo.png" alt="demo" width="80%">
+<p align="center">
+  <img src="demo.png" alt="demo" width="80%">
+</p>
