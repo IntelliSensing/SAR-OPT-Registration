@@ -83,18 +83,18 @@ Best evaluation results on the OS dataset (90 image pairs):
 <table align="center">
   <tr>
     <th colspan="3" align="center">MSE</th>
-    <th align="center">RCM</th>
+    <th rowspan="2" align="center">RCM</th>
   </tr>
   <tr>
     <td align="center">xMSE</td>
     <td align="center">yMSE</td>
     <td align="center">xyMSE</td>
-    <td rowspan="2" align="center">92.8%</td>
   </tr>
   <tr>
     <td align="center">1.672</td>
     <td align="center">1.841</td>
     <td align="center">2.6003</td>
+    <td align="center">92.8%</td>
   </tr>
 </table>
 
